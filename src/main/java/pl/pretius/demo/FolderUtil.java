@@ -3,15 +3,11 @@ package pl.pretius.demo;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 public class FolderUtil {
 
-    static void createFolders(Path path) {
-        //main folders
-        List<Folder> folders = Arrays.asList(Folder.values());
-        //create dirs
+    static void createFolders(Path path, List<Folder> folders) {
         for (Folder folder : folders) {
             File dir = new File(path+"/"+folder);
             dir.mkdir();
@@ -30,8 +26,8 @@ public class FolderUtil {
         return Paths.get(path + "/" + folder);
     }
 
-    static String selectFileFromFolder(Path homePath, String fileName) {
-        return homePath.toString()+"/"+fileName;
+    static String selectFileFromFolder(Path path, String fileName) {
+        return path.toString()+"/"+fileName;
     }
 
 
