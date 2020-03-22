@@ -1,5 +1,5 @@
 package pl.pretius.demo;
 
-public enum Counters{
+public enum Counters {
     test, dev, overall;
 }

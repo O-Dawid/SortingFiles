@@ -9,7 +9,7 @@ public class FolderUtil {
 
     static void createFolders(Path path, List<Folder> folders) {
         for (Folder folder : folders) {
-            File dir = new File(path+"/"+folder);
+            File dir = new File(path + "/" + folder);
             dir.mkdir();
         }
     }
@@ -27,9 +27,7 @@ public class FolderUtil {
     }
 
     static String selectFileFromFolder(Path path, String fileName) {
-        return path.toString()+"/"+fileName;
+        return path.toString() + "/" + fileName;
     }
 
-
-    
 }

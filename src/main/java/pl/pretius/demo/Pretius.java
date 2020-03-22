@@ -15,10 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
-
 class Pretius {
-    private HashMap<Counters, Integer> counters = new HashMap<Counters, Integer>();
+    private HashMap<Counters, Integer> counters;
     private List<Folder> folders;
     private Path projectPath;
     private Path foldersPath;
@@ -35,17 +33,17 @@ class Pretius {
                 for (WatchEvent<?> event : events) {
                     if (isNewFile(event)) {
                         String eventFilename = getEventFilename(event);
-                        String eventFileExtention = getFileExtention(eventFilename);
+                        String eventFileExtention = FileUtil.getFileExtention(eventFilename);
                         File eventFile = new File(FolderUtil.selectFileFromFolder(homePath, eventFilename));
                         int hour = getHour();
 
                         if (isJarOrXml(eventFileExtention)) {
                             increaseMapValue(counters, Counters.overall);
                             if (!isEven(hour)) {
-                                moveFileToFolder(eventFile, Folder.TEST);
+                                FileUtil.moveFileToFolder(eventFile, Folder.TEST);
                                 increaseMapValue(counters, Counters.test);
                             } else {
-                                moveFileToFolder(eventFile, Folder.DEV);
+                                FileUtil.moveFileToFolder(eventFile, Folder.DEV);
                                 increaseMapValue(counters, Counters.dev);
                             }
                         }
@@ -61,6 +59,7 @@ class Pretius {
     }
 
     private void init() {
+        counters = new HashMap<Counters, Integer>();
         counters.put(Counters.overall, 0);
         counters.put(Counters.dev, 0);
         counters.put(Counters.test, 0);
@@ -78,15 +77,6 @@ class Pretius {
 
     private String getEventFilename(WatchEvent<?> event) {
         return event.context().toString();
-    }
-
-    private void moveFileToFolder(File file, Folder folder) {
-        file.renameTo(new File(
-                (Paths.get(file.getPath()).getParent()).getParent().toString() + "/" + folder + "/" + file.getName()));
-    }
-
-    private String getFileExtention(String fileName) {
-        return FilenameUtils.getExtension(fileName);
     }
 
     private boolean isJarOrXml(String fileExtention) {
